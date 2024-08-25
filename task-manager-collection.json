@@ -1,0 +1,141 @@
+{
+    "info": {
+      "name": "Task Manager API",
+      "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+    },
+    "item": [
+      {
+        "name": "Criar Tarefa",
+        "request": {
+          "method": "POST",
+          "header": [
+            {
+              "key": "Content-Type",
+              "value": "application/json"
+            }
+          ],
+          "body": {
+            "mode": "raw",
+            "raw": "{\n  \"name\": \"Estudar Node.js\",\n  \"description\": \"Aprender sobre APIs REST com Node.js\"\n}"
+          },
+          "url": {
+            "raw": "http://localhost:3000/tasks",
+            "protocol": "http",
+            "host": [
+              "localhost"
+            ],
+            "port": "3000",
+            "path": [
+              "tasks"
+            ]
+          }
+        },
+        "response": [],
+        "event": [
+          {
+            "listen": "test",
+            "script": {
+              "exec": [
+                "pm.test(\"Status code is 201\", function () {",
+                "    pm.response.to.have.status(201);",
+                "});",
+                "",
+                "pm.test(\"Response has task id\", function () {",
+                "    var jsonData = pm.response.json();",
+                "    pm.expect(jsonData).to.have.property('id');",
+                "});"
+              ],
+              "type": "text/javascript"
+            }
+          }
+        ]
+      },
+      {
+        "name": "Excluir Tarefa",
+        "request": {
+          "method": "DELETE",
+          "url": {
+            "raw": "http://localhost:3000/tasks/{{taskId}}",
+            "protocol": "http",
+            "host": [
+              "localhost"
+            ],
+            "port": "3000",
+            "path": [
+              "tasks",
+              "{{taskId}}"
+            ]
+          }
+        },
+        "response": [],
+        "event": [
+          {
+            "listen": "prerequest",
+            "script": {
+              "exec": [
+                "if (!pm.environment.get(\"taskId\")) {",
+                "    console.log(\"No task ID found\");",
+                "}"
+              ],
+              "type": "text/javascript"
+            }
+          },
+          {
+            "listen": "test",
+            "script": {
+              "exec": [
+                "pm.test(\"Status code is 204\", function () {",
+                "    pm.response.to.have.status(204);",
+                "});"
+              ],
+              "type": "text/javascript"
+            }
+          }
+        ]
+      },
+      {
+        "name": "Listar Tarefas",
+        "request": {
+          "method": "GET",
+          "url": {
+            "raw": "http://localhost:3000/tasks",
+            "protocol": "http",
+            "host": [
+              "localhost"
+            ],
+            "port": "3000",
+            "path": [
+              "tasks"
+            ]
+          }
+        },
+        "response": [],
+        "event": [
+          {
+            "listen": "test",
+            "script": {
+              "exec": [
+                "pm.test(\"Status code is 200\", function () {",
+                "    pm.response.to.have.status(200);",
+                "});",
+                "",
+                "pm.test(\"Response is an array\", function () {",
+                "    var jsonData = pm.response.json();",
+                "    pm.expect(jsonData).to.be.an('array');",
+                "});"
+              ],
+              "type": "text/javascript"
+            }
+          }
+        ]
+      }
+    ],
+    "variable": [
+      {
+        "key": "taskId",
+        "value": "",
+        "type": "string"
+      }
+    ]
+  }
+  
